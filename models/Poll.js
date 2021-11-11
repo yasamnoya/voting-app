@@ -9,7 +9,6 @@ const pollSchema = new mongoose.Schema({
     label: {
       type: String,
       required: true,
-      unique: true
     },
     count: {
       type: Number,

@@ -2,16 +2,12 @@ const router = require("express").Router();
 const Poll = require("../../models/Poll");
 
 router.post("/", async (req, res) => {
-  let poll = await Poll.create({ title: req.body.title });
-
-  for (let option of req.body.options) {
-    poll = poll.updateOne(
-      {
-        $push: { votes: { label: option } }
-      },
-      { new: true }
-    );
-  }
+  const newPoll = {
+    title: req.body.title,
+    votes: req.body.options.map((option) => ({ label: option })),
+  };
+  console.log(newPoll.votes)
+  let poll = await Poll.create(newPoll);
 
   res.status(201).json(poll);
 });
