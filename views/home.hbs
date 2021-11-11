@@ -1,0 +1,7 @@
+<h1 class="text-center mb-5">
+  Voting App
+</h1>
+{{#each pollData}}
+  {{> poll info=this.info data=this.data id=this.id}}
+{{/each}}
+</div>

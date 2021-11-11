@@ -1,0 +1,94 @@
+<div class="card mx-auto mt-3 p-3 bg-light">
+  <div class="card-body">
+    <div class="hstack">
+      <h3>
+        {{info.title}}
+      </h3>
+      <div class="ms-auto">
+        Created by: {{info.createdBy}}
+      </div>
+    </div>
+    <form action="vote">
+      <div class="my-3">
+        <select id="select{{id}}" class="form-select">
+          {{#each data.labels}}
+          <option value="{{this}}">
+            {{this}}
+          </option>
+          {{/each}}
+          <option value="New Option" selected>
+            New Option
+          </option>
+        </select>
+        <input id="text{{id}}" type="text" class="form-control" placeholder="Enter a new option"/>
+      </div>
+      <div>
+        <button id="button{{id}}" class="btn btn-primary w-100" >Vote</button>
+      </div>
+    </form>
+  </div>
+  <canvas id="myChart{{id}}" class="m-auto" width="400"></canvas>
+</div>
+<script>
+  const text{{id}} = $('#text{{id}}')
+  const select{{id}} = $('#select{{id}}')
+  // vote
+  $('#button{{id}}').click( async (e) => {
+    e.preventDefault()
+
+    let selectedOption = select{{id}}.val();
+    if (selectedOption == "New Option") {
+      selectedOption = text{{id}}.val();
+    }
+    const res = await $.ajax({
+      type: "PATCH",
+      url: `/api/poll/{{id}}/vote/${selectedOption}`
+    });
+    location.reload();
+  });
+
+  // hide/unhide text input
+  $('#select{{id}}').change((e) => {
+
+    if (e.target.value == "New Option"){
+      text{{id}}.show();
+    } else {
+      text{{id}}.hide();
+    } 
+  });
+
+  // Chart.js
+  const ctx{{id}} = document.getElementById('myChart{{id}}').getContext('2d');
+    const myChart{{id}} = new Chart(ctx{{id}} , {
+        type: 'doughnut',
+        data: {
+            labels:[
+              {{#each data.labels}}
+                "{{this}}",
+              {{/each}}
+            ],
+            datasets: [{
+                label: '# of Votes',
+                data: [
+                  {{#each data.votes}}
+                    {{this}},
+                  {{/each}}
+                ],
+                backgroundColor: shuffleArray([
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ]),
+                hoverOffset: 10 
+            }]
+        },
+    });
+</script>
+<style>
+  .card {
+    max-width: 768px;
+  }
+</style>
