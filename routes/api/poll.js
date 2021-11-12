@@ -1,54 +1,59 @@
 const router = require("express").Router();
-const Poll = require("../../models/Poll");
+const { Poll, Vote } = require("../../models");
 
 router.post("/", async (req, res) => {
   const newPoll = {
     title: req.body.title,
-    votes: req.body.options.map((option) => ({ label: option })),
   };
-  console.log(newPoll.votes)
   let poll = await Poll.create(newPoll);
+  const votes = await Vote.insertMany(req.body.options.map((option) => ({ label: option, pollId: poll._id })))
+  await poll.updateOne({
+    $push: {
+      votes: votes.map((vote => vote._id))
+    }
+  });
 
+  poll = await Poll.findById(poll._id).populate('votes');
   res.status(201).json(poll);
 });
 
 router.get("/", async (req, res) => {
-  const polls = await Poll.find({});
+  const polls = await Poll.find({}).populate();
   res.json(polls);
 });
 
 router.patch("/:pollId/vote/:label", async (req, res) => {
-  let poll = await Poll.findOneAndUpdate(
+  let vote = await Vote.findOneAndUpdate(
     {
-      _id: req.params.pollId,
-      votes: {
-        $elemMatch: { label: req.params.label },
-      },
+      pollId: req.params.pollId,
+      label: req.params.label,
     },
-    { $inc: { "votes.$.count": 1 } },
+    { $inc: { count: 1 } },
     { new: true },
   );
-  if (poll) {
-    return res.json(poll);
+  if (vote) {
+    return res.json(vote);
   }
 
-  poll = await Poll.findOneAndUpdate(
+  vote = await Vote.create({
+    label: req.params.label,
+    count: 1,
+    pollId: req.params.pollId,
+  });
+  const poll = await Poll.findOneAndUpdate(
     {
       _id: req.params.pollId,
     },
     {
       $push:
       {
-        votes: {
-          label: req.params.label,
-          count: 1
-        }
-      }
+        votes: vote._id
+      },
     },
     { new: true }
   );
   if (poll) {
-    return res.json(poll);
+    return res.json(vote);
   }
 
   res.status(404).send();

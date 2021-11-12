@@ -24,8 +24,7 @@ let pollData = [{
 router.use('/api', require('./api'));
 
 router.get('/', async (req, res) => {
-  const polls = await Poll.find({});
-  console.log(polls)
+  const polls = await Poll.find({}).populate('votes');
   pollData = polls.map((poll) => ({
     id: poll._id,
     info: {
@@ -37,7 +36,6 @@ router.get('/', async (req, res) => {
       votes: poll.votes.map((vote) => vote.count),
     },
   }));
-  console.log(pollData[0])
   res.render('home', { pollData });
 });
 

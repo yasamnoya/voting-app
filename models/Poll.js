@@ -6,14 +6,9 @@ const pollSchema = new mongoose.Schema({
     required: true,
   },
   votes: [{
-    label: {
-      type: String,
-      required: true,
-    },
-    count: {
-      type: Number,
-      default: 0,
-    },
+    type: mongoose.Schema.Types.ObjectId,
+    ref : 'Vote',
+    required: true,
   }],
 });
 
