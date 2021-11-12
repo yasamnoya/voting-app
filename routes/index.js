@@ -39,4 +39,8 @@ router.get('/', async (req, res) => {
   res.render('home', { pollData });
 });
 
+router.get('/new-poll', (req, res) => {
+  res.render('new-poll');
+});
+
 module.exports = router

@@ -3,17 +3,18 @@ const { Poll, Vote } = require("../../models");
 
 router.post("/", async (req, res) => {
   const newPoll = {
-    title: req.body.title,
+    title: req.body.title.trim(),
   };
   let poll = await Poll.create(newPoll);
+
   const votes = await Vote.insertMany(req.body.options.map((option) => ({ label: option, pollId: poll._id })))
   await poll.updateOne({
     $push: {
       votes: votes.map((vote => vote._id))
     }
   });
-
   poll = await Poll.findById(poll._id).populate('votes');
+
   res.status(201).json(poll);
 });
 

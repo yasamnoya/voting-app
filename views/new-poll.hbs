@@ -1,0 +1,53 @@
+<h1 class="text-center mb-5">
+  New Poll
+</h1>
+<div class="card mx-auto mt-3 p-3 bg-light">
+  <div class="card-body">
+    <div class="hstack">
+    </div>
+    <form action="vote">
+      <div class="my-3">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="Title">
+          <label for="floatingInput">Title</label>
+        </div>
+        <div class="form-floating">
+          <textarea class="form-control" placeholder="Options, seperated by comma" id="floatingTextarea"></textarea>
+          <label for="floatingTextarea">Options, seperated by comma</label>
+        </div>
+      </div>
+      <div>
+        <button id="buttonCreate" class="btn btn-primary w-100" >Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+$('#buttonCreate').click(async (e) => {
+  e.preventDefault();
+  const title = $('#floatingInput').val().trim();
+  const options = $('#floatingTextarea').val().split(",").map((o) => o.trim());
+  if (options[0] == "") return
+
+  await $.ajax({
+    method: "POST",
+    url: "/api/poll",
+    data: {
+      title,
+      options,
+    },
+  });
+
+  location.assign("/");
+});
+</script>
+
+<style>
+  .card {
+    max-width: 768px;
+  }
+  #floatingTextarea {
+    height: 100px;
+  }
+</style>
