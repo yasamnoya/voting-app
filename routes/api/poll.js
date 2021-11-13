@@ -7,7 +7,6 @@ router.post("/", auth, async (req, res) => {
     title: req.body.title.trim(),
     owner: req.user._id,
   };
-  New Poll
   let poll = await Poll.create(newPoll);
 
   const votes = await Vote.insertMany(req.body.options.map((option) => ({ label: option, pollId: poll._id })))
