@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Poll = require('../models/Poll');
+const { auth } = require('../middlewares')
 
 let pollData = [{
   info: {
@@ -41,6 +42,14 @@ router.get('/', async (req, res) => {
 
 router.get('/new-poll', (req, res) => {
   res.render('new-poll');
+});
+
+router.get('/register', (req, res) => {
+  res.render('register');
+});
+
+router.get('/login', (req, res) => {
+  res.render('login');
 });
 
 module.exports = router

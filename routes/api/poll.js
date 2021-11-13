@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const { Poll, Vote } = require("../../models");
+const { auth } = require('../../middlewares');
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const newPoll = {
     title: req.body.title.trim(),
+    owner: req.user._id,
   };
   let poll = await Poll.create(newPoll);
 

@@ -1,0 +1,39 @@
+<h1 class="text-center mb-5">
+  New Poll
+</h1>
+<div class="card mx-auto mt-3 p-3 bg-light">
+  <div class="card-body">
+    <div class="hstack">
+    </div>
+    <form action="vote">
+      <div class="my-3">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="name" placeholder="Jane Doe">
+          <label for="name">Name</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="email" placeholder="name@example.com">
+          <label for="email">Email address</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="password" placeholder="Password">
+          <label for="password">Password</label>
+        </div>
+      <div>
+        <button id="buttonRegister" class="btn btn-primary w-100" >Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+$('#buttonLogin').click(async (e) => {
+  e.preventDefault();
+});
+</script>
+
+<style>
+  .card {
+    max-width: 768px;
+  }
+</style>
