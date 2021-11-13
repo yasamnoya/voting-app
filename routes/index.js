@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
   res.render('home', { pollData });
 });
 
-router.get('/new-poll', auth, (req, res) => {
+router.get('/new-poll', (req, res) => {
   res.render('new-poll');
 });
 

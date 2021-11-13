@@ -1,5 +1,5 @@
 <h1 class="text-center mb-5">
-  New Poll
+  Login
 </h1>
 <div class="card mx-auto mt-3 p-3 bg-light">
   <div class="card-body">
@@ -25,6 +25,25 @@
 <script>
 $('#buttonLogin').click(async (e) => {
   e.preventDefault();
+  const email = $('#email').val();
+  const password = $('#password').val();
+
+  try {
+    const res = await $.ajax({ 
+      method: "POST",
+      url: "/api/user/login",
+      data: {
+        email,
+        password,
+      }
+    });
+    console.log(res);
+    localStorage.setItem("user", res.user);
+    localStorage.setItem("token", res.token);
+    location.assign("/");
+  } catch(e) {
+    location.reload();
+  }
 });
 </script>
 

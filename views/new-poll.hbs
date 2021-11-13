@@ -5,7 +5,7 @@
   <div class="card-body">
     <div class="hstack">
     </div>
-    <form action="vote">
+    <form action="">
       <div class="my-3">
         <div class="form-floating mb-3">
           <input type="text" class="form-control" id="floatingInput" placeholder="Title">
@@ -30,16 +30,22 @@ $('#buttonCreate').click(async (e) => {
   const options = $('#floatingTextarea').val().split(",").map((o) => o.trim());
   if (options[0] == "") return
 
-  await $.ajax({
-    method: "POST",
-    url: "/api/poll",
-    data: {
-      title,
-      options,
-    },
-  });
-
-  location.assign("/");
+  try{
+    const res = await $.ajax({
+      method: "POST",
+      url: "/api/poll",
+      headers:{
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      data: {
+        title,
+        options,
+      },
+    });
+    location.assign("/");
+  } catch(e) {
+    location.reload();
+  }
 });
 </script>
 
