@@ -10,6 +10,10 @@ const pollSchema = new mongoose.Schema({
     ref : 'Vote',
     required: true,
   }],
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
 });
 
 const Poll = mongoose.model('Poll', pollSchema);

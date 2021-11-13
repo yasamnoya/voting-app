@@ -1,10 +1,13 @@
 const router = require("express").Router();
 const { Poll, Vote } = require("../../models");
+const { auth } = require('../../middlewares');
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const newPoll = {
     title: req.body.title.trim(),
+    owner: req.user._id,
   };
+  New Poll
   let poll = await Poll.create(newPoll);
 
   const votes = await Vote.insertMany(req.body.options.map((option) => ({ label: option, pollId: poll._id })))
